@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Awesome Portfolio</title>
+  <meta name="description" content="Responsive, animated portfolio template with sections for About, Experience, Skills, Projects, Testimonials, Blog and Contact." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-1:#0a0b14; 
+      --bg-2:#14162b; 
+      --fg:#e7e9ee; 
+      --muted:#a7adbd;
+      --acc-1:#7c6cff; 
+      --acc-2:#00e0ff; 
+      --acc-3:#ffb86b; 
+      --card:#101224ee; 
+      --glass:rgba(255,255,255,0.06);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:22px; 
+      --max:1200px;
+    }
+
+    /* Global Reset */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--fg); background:linear-gradient(120deg,var(--bg-1),var(--bg-2)) fixed; 
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji';
+      line-height:1.6; overflow-x:hidden; scroll-behavior:smooth;
+    }
+    img{max-width:100%; display:block}
+    a{color:inherit; text-decoration:none}
+    p{color:var(--muted)}
+    .container{max-width:var(--max); margin-inline:auto; padding:0 1.25rem}
+
+    /* Animated gradient orbs in background */
+    .bg-orb{position:fixed; z-index:-2; filter:blur(80px); opacity:.5; pointer-events:none}
+    .orb-1{width:500px; height:500px; background:radial-gradient(circle at 30% 30%, var(--acc-1), transparent 60%); top:-120px; left:-120px; animation:float 12s ease-in-out infinite}
+    .orb-2{width:480px; height:480px; background:radial-gradient(circle at 70% 40%, var(--acc-2), transparent 60%); bottom:-160px; right:-120px; animation:float 14s ease-in-out infinite reverse}
+    @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(25px)} }
+
+    /* Subtle moving grid overlay */
+    .bg-grid{position:fixed; inset:0; background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size:60px 60px, 60px 60px; z-index:-3; animation:gridMove 30s linear infinite}
+    @keyframes gridMove{ from{background-position:0 0, 0 0} to{background-position:120px 120px, 120px 120px} }
+
+    /* Header/Nav */
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px); background:linear-gradient(180deg, rgba(10,11,20,.85), rgba(10,11,20,.35)); border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.9rem 0}
+    .brand{display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.4px}
+    .brand .logo{width:36px; height:36px; border-radius:12px; background:linear-gradient(135deg,var(--acc-1),var(--acc-2)); box-shadow:var(--shadow)}
+    .nav a{opacity:.9}
+    .nav a:hover{opacity:1}
+    .nav ul{list-style:none; display:flex; gap:1.1rem; align-items:center}
+    .btn{display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.9rem 1.1rem; border-radius:14px; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow:var(--shadow); transition:.3s transform, .3s box-shadow, .3s background}
+    .btn:hover{transform:translateY(-2px); background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03))}
+    .btn.primary{background:linear-gradient(135deg,var(--acc-1),var(--acc-2)); border:none; color:#0b0d16; font-weight:700}
+
+    /* Mobile nav */
+    .burger{display:none; width:40px; height:40px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:var(--glass); place-items:center; cursor:pointer}
+    .burger span{display:block; width:20px; height:2px; background:#fff; position:relative}
+    .burger span::before,.burger span::after{content:""; position:absolute; left:0; width:100%; height:2px; background:#fff}
+    .burger span::before{top:-6px} .burger span::after{top:6px}
+
+    @media (max-width: 900px){
+      .nav ul{position:fixed; inset:60px 0 auto 0; padding:1rem; background:rgba(10,11,20,.98); border-bottom:1px solid rgba(255,255,255,.08); flex-direction:column; gap:.8rem; transform:translateY(-120%); transition:.35s; z-index:60}
+      .nav ul.open{transform:translateY(0)}
+      .burger{display:grid}
+    }
+
+    /* Hero */
+    .hero{position:relative; display:grid; align-items:center; min-height:88svh; overflow:hidden}
+    .hero::before{content:""; position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1516113173-3ac1a4f0f9da?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; filter:contrast(1.05) brightness(.65) saturate(1.2)}
+    .hero::after{content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 70% 20%, rgba(124,108,255,.35), transparent 45%), radial-gradient(circle at 20% 80%, rgba(0,224,255,.25), transparent 45%)}
+    .hero > .container{position:relative; z-index:1}
+    .hero-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:2rem}
+    .headline{font-family:Poppins, Inter, system-ui; font-size:clamp(2rem, 6vw, 4rem); line-height:1.1; font-weight:800; letter-spacing:.3px}
+    .headline span{background:linear-gradient(135deg,var(--acc-2),var(--acc-3)); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .sub{max-width:50ch}
+    .hero-actions{display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1.2rem}
+    .stats{display:grid; grid-template-columns:repeat(3, minmax(90px, 1fr)); gap:1rem; margin-top:1.6rem}
+    .stat{background:var(--glass); border:1px solid rgba(255,255,255,.08); padding:1rem; border-radius:16px; text-align:center}
+    .stat b{font-size:1.4rem}
+    .pfp{width:min(340px, 90%); aspect-ratio:1; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.12); border-radius:28px; box-shadow:var(--shadow); overflow:hidden}
+    .pfp img{width:100%; height:100%; object-fit:cover}
+    @media (max-width: 900px){ .hero-grid{grid-template-columns:1fr} .pfp{justify-self:center} }
+
+    /* Section base */
+    section{padding:90px 0}
+    .section-title{font-family:Poppins, Inter; font-size:clamp(1.6rem,3.2vw,2.2rem); margin:0 0 .6rem}
+    .section-desc{margin:0 0 1.6rem; max-width:70ch}
+
+    /* About */
+    .about{position:relative}
+    .about .grid{display:grid; grid-template-columns:1.1fr .9fr; gap:2rem}
+    .card{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:1.1rem; box-shadow:var(--shadow)}
+    .list{display:grid; gap:.6rem; margin:0; padding:0; list-style:none}
+    .list li{display:flex; gap:.6rem; align-items:flex-start}
+    .tag{display:inline-block; padding:.35rem .7rem; font-size:.85rem; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); border-radius:999px}
+
+    /* Experience Timeline */
+    .timeline{position:relative; margin-top:.5rem}
+    .timeline::before{content:""; position:absolute; left:14px; top:0; bottom:0; width:2px; background:linear-gradient(var(--acc-1),var(--acc-2))}
+    .tl-item{display:grid; grid-template-columns:36px 1fr; gap:1rem; padding:1rem 0}
+    .tl-dot{width:12px; height:12px; margin:12px; border-radius:50%; background:var(--acc-2); box-shadow:0 0 0 4px rgba(0,224,255,.15)}
+    .tl-card{padding:1rem; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02))}
+
+    /* Skills */
+    .skills-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem}
+    .skill{padding:1rem; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04)}
+    .meter{height:9px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; margin-top:.6rem}
+    .meter > span{display:block; height:100%; background:linear-gradient(90deg,var(--acc-1),var(--acc-2)); width:0}
+
+    /* Projects */
+    .projects-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem}
+    .project{position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04)}
+    .project .thumb{aspect-ratio:16/10; background:#0e0f1a; overflow:hidden}
+    .project .thumb img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease}
+    .project:hover .thumb img{transform:scale(1.05)}
+    .project .content{padding:1rem}
+    .chip{display:inline-block; font-size:.75rem; opacity:.9; border:1px solid rgba(255,255,255,.14); padding:.25rem .55rem; border-radius:999px}
+
+    /* Testimonials */
+    .testimonials{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem}
+    .quote{padding:1rem; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); position:relative}
+    .quote::before{content:'“'; position:absolute; font-size:4rem; line-height:1; top:-10px; left:10px; opacity:.12}
+
+    /* Services */
+    .services{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem}
+    .svc{padding:1rem; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); border-radius:18px}
+
+    /* Blog */
+    .blog{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem}
+    .post{border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); border-radius:18px; overflow:hidden}
+    .post .thumb{aspect-ratio:16/9; overflow:hidden}
+    .post .thumb img{width:100%; height:100%; object-fit:cover}
+    .post .content{padding:1rem}
+
+    /* Contact */
+    form{display:grid; gap:.9rem}
+    input,textarea{width:100%; padding:0.9rem 1rem; border-radius:14px; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.06); color:var(--fg)}
+    textarea{min-height:140px; resize:vertical}
+
+    /* Footer */
+    footer{padding:36px 0; border-top:1px solid rgba(255,255,255,.08); color:var(--muted)}
+
+    /* Utilities */
+    .center{display:grid; place-items:center}
+    .grid{display:grid; gap:1rem}
+    .row{display:flex; gap:.6rem; flex-wrap:wrap}
+    .right{margin-left:auto}
+
+    /* Reveal animations */
+    .reveal{opacity:0; transform:translateY(24px); transition:.8s ease}
+    .reveal.visible{opacity:1; transform:none}
+
+    /* Progress bar */
+    .progress{position:fixed; left:0; top:0; height:3px; width:0; background:linear-gradient(90deg,var(--acc-1),var(--acc-2)); z-index:70}
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .reveal{transition:none}
+      .bg-grid{animation:none}
+      .orb-1,.orb-2{animation:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+  <div class="progress" id="progress"></div>
+
+  <!-- Header / Nav -->
+  <header>
+    <div class="container nav">
+      <div class="brand"><div class="logo" aria-hidden="true"></div> <span>MyPortfolio</span></div>
+      <nav>
+        <button class="burger" id="burger" aria-label="Open menu"><span></span></button>
+        <ul id="menu">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="btn primary right" href="#contact">Hire Me</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="container hero-grid">
+      <div class="reveal">
+        <h1 class="headline">Hi, I'm <span>Surya Vignesh</span> —
+          a Developer & Data Scientist building delightful, data‑driven products.</h1>
+        <p class="sub">I craft performant web apps, ML-powered insights, and pixel‑perfect interfaces. This is a starter portfolio. Replace all dummy content with your details and links. Smooth animations, great background, fully responsive — ready to ship.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#projects">See Projects</a>
+          <a class="btn" href="#about">Learn More</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>20+</b><div>Projects</div></div>
+          <div class="stat"><b>8</b><div>Certifications</div></div>
+          <div class="stat"><b>3 yrs</b><div>Experience</div></div>
+        </div>
+      </div>
+      <div class="pfp reveal">
+        <!-- Replace with your image -->
+        <img src="https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=1274&auto=format&fit=crop" alt="Your portrait placeholder" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="about">
+    <div class="container grid">
+      <div class="grid about grid">
+        <div class="card reveal">
+          <h2 class="section-title">About Me</h2>
+          <p class="section-desc">I'm a multidisciplinary engineer who loves the intersection of code, design, and data. I focus on readable code, robust systems, and beautiful UX. Currently pursuing Data Science & Full‑Stack development. Looking for exciting roles and freelance work.</p>
+          <ul class="list">
+            <li><span class="tag">Location</span> India (Open to Remote)</li>
+            <li><span class="tag">Email</span> you@example.com</li>
+            <li><span class="tag">Phone</span> +91 90000 00000</li>
+            <li><span class="tag">Freelance</span> Available</li>
+          </ul>
+        </div>
+        <div class="grid reveal">
+          <div class="card">
+            <h3>Highlights</h3>
+            <ul class="list">
+              <li>🚀 Shipped 10+ responsive websites and dashboards.</li>
+              <li>🤖 Built ML pipelines for classification & forecasting.</li>
+              <li>⚙️ Automated data workflows saving 40% manual effort.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Tech I Love</h3>
+            <div class="row">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS / Tailwind</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">React</span>
+              <span class="tag">Node</span>
+              <span class="tag">Python</span>
+              <span class="tag">Pandas</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Edge Impulse</span>
+              <span class="tag">Arduino</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <div class="container">
+      <h2 class="section-title">Experience</h2>
+      <p class="section-desc">A quick timeline of roles and big wins. Swap with your own internships, research, and positions.</p>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <strong>Frontend Developer — THUB</strong> <span class="tag" style="margin-left:.5rem">2024–Present</span>
+            <p>Built an analytics dashboard (Next.js) with interactive charts, improving user adoption by 32%.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <strong>Data Science Intern — InsightLab</strong> <span class="tag" style="margin-left:.5rem">2023</span>
+            <p>Designed forecasting models (Prophet/XGBoost) to predict demand; reduced stockouts by 18%.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <strong>Embedded/Robotics Projects</strong> <span class="tag" style="margin-left:.5rem">Ongoing</span>
+            <p>Arduino‑based robots: maze solver, obstacle avoidance, wall‑climber; integrated sensors & ML.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-title">Skills</h2>
+      <p class="section-desc">Here are some core skills with confidence meters. Edit the widths to match your level.</p>
+      <div class="skills-grid">
+        <div class="skill reveal"><strong>HTML/CSS</strong><div class="meter"><span style="width:95%"></span></div></div>
+        <div class="skill reveal"><strong>JavaScript</strong><div class="meter"><span style="width:85%"></span></div></div>
+        <div class="skill reveal"><strong>React</strong><div class="meter"><span style="width:80%"></span></div></div>
+        <div class="skill reveal"><strong>Python</strong><div class="meter"><span style="width:88%"></span></div></div>
+        <div class="skill reveal"><strong>Machine Learning</strong><div class="meter"><span style="width:78%"></span></div></div>
+        <div class="skill reveal"><strong>SQL</strong><div class="meter"><span style="width:75%"></span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-title">Selected Projects</h2>
+      <p class="section-desc">Diverse work across web, ML, and robotics. Replace images, titles, and links with yours.</p>
+      <div class="projects-grid">
+        <article class="project reveal">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop" alt="Project 1" loading="lazy"></div>
+          <div class="content">
+            <h3>Analytics Dashboard</h3>
+            <p>Responsive dashboard with authentication and dynamic charts. Deployed on Vercel.</p>
+            <div class="row"><span class="chip">Next.js</span><span class="chip">Chart.js</span><span class="chip">Supabase</span></div>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1534759846116-5797a4d0f32f?q=80&w=2070&auto=format&fit=crop" alt="Project 2" loading="lazy"></div>
+          <div class="content">
+            <h3>ML Forecasting</h3>
+            <p>Time-series pipeline with feature store & model registry; API for predictions.</p>
+            <div class="row"><span class="chip">Python</span><span class="chip">XGBoost</span><span class="chip">FastAPI</span></div>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?q=80&w=2070&auto=format&fit=crop" alt="Project 3" loading="lazy"></div>
+          <div class="content">
+            <h3>Maze Solver Robot</h3>
+            <p>Flood-fill algorithm, ultrasonic sensors, efficient turning via data-driven tuning.</p>
+            <div class="row"><span class="chip">Arduino</span><span class="chip">C++</span><span class="chip">TB6612FNG</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">Services</h2>
+      <p class="section-desc">I help teams go from idea to production with clean code and great UX.</p>
+      <div class="services">
+        <div class="svc reveal"><h3>Web Development</h3><p>Landing pages, dashboards, and full‑stack apps with modern tooling.</p></div>
+        <div class="svc reveal"><h3>Data & ML</h3><p>Data pipelines, EDA, ML models, and MLOps best practices.</p></div>
+        <div class="svc reveal"><h3>Robotics/IoT</h3><p>Rapid prototyping with sensors, microcontrollers, and control algorithms.</p></div>
+        <div class="svc reveal"><h3>Consulting</h3><p>Architecture reviews, performance audits, and design systems.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials">
+    <div class="container">
+      <h2 class="section-title">Testimonials</h2>
+      <p class="section-desc">What clients and mentors say.</p>
+      <div class="testimonials">
+        <div class="quote reveal"><p>“A rare blend of design sense and engineering rigor. We shipped ahead of schedule.”</p><small>— Product Manager, XYZ</small></div>
+        <div class="quote reveal"><p>“Understands data deeply and explains it clearly. Dashboards are a joy to use.”</p><small>— Analytics Lead</small></div>
+        <div class="quote reveal"><p>“Turned our prototype into a polished product with smooth animations and speed.”</p><small>— Startup Founder</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog">
+    <div class="container">
+      <h2 class="section-title">Blog & Writing</h2>
+      <p class="section-desc">Share what you learn. Writing builds credibility.</p>
+      <div class="blog">
+        <article class="post reveal">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=2070&auto=format&fit=crop" alt="Post image" loading="lazy"></div>
+          <div class="content"><h3>Building a Fast, Accessible Portfolio</h3><p>Tips on performance, semantics, and micro‑interactions.</p></div>
+        </article>
+        <article class="post reveal">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2070&auto=format&fit=crop" alt="Post image" loading="lazy"></div>
+          <div class="content"><h3>From EDA to Deployment</h3><p>A practical guide to ML projects that reach users.</p></div>
+        </article>
+        <article class="post reveal">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1522252234503-e356532cafd5?q=80&w=2070&auto=format&fit=crop" alt="Post image" loading="lazy"></div>
+          <div class="content"><h3>Robotics Notes</h3><p>What I learned building maze‑solving and wall‑climbing robots.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-desc">Ready to collaborate? Send a message — I reply fast.</p>
+      <div class="grid" style="grid-template-columns:1.1fr .9fr; gap:1rem">
+        <form class="reveal" onsubmit="event.preventDefault(); alert('Thanks! Replace with your form handler.');">
+          <div class="row">
+            <input aria-label="Your name" placeholder="Your name" required>
+            <input type="email" aria-label="Email" placeholder="Email" required>
+          </div>
+          <input aria-label="Subject" placeholder="Subject">
+          <textarea aria-label="Message" placeholder="Message"></textarea>
+          <button class="btn primary" type="submit">Send Message</button>
+        </form>
+        <div class="card reveal">
+          <h3>Find me online</h3>
+          <ul class="list">
+            <li>🔗 LinkedIn: <a href="#">/in/your-handle</a></li>
+            <li>🧑‍💻 GitHub: <a href="#">/your-handle</a></li>
+            <li>🐦 Twitter: <a href="#">@yourhandle</a></li>
+            <li>✉️ Email: <a href="mailto:you@example.com">you@example.com</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="row" style="justify-content:space-between; align-items:center">
+        <small>© <span id="year"></span> Your Name. All rights reserved.</small>
+        <a class="btn" href="#home" id="backToTop">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu');
+    burger?.addEventListener('click', ()=> menu.classList.toggle('open'));
+    menu?.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> menu.classList.remove('open')));
+
+    // IntersectionObserver for reveal-on-scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, {threshold:.15});
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+    // Animate skill meters when visible
+    const meters = document.querySelectorAll('.meter > span');
+    meters.forEach(m=>{
+      const w = m.style.width; m.style.width = '0';
+      const obs = new IntersectionObserver((es)=>{
+        es.forEach(en=>{ if(en.isIntersecting){ m.style.transition='width 1.2s ease'; m.style.width = w; obs.unobserve(m);} })
+      },{threshold:.4});
+      obs.observe(m);
+    });
+
+    // Scroll progress bar
+    const progress = document.getElementById('progress');
+    const onScroll = ()=>{
+      const h = document.documentElement; const sTop = h.scrollTop; const sHeight = h.scrollHeight - h.clientHeight; const pct = (sTop / sHeight) * 100; progress.style.width = pct + '%';
+    };
+    document.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+    // Back to top smooth
+    document.getElementById('backToTop')?.addEventListener('click', (e)=>{
+      e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    // Current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
